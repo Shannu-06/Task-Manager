@@ -1,21 +1,29 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useEffect, useState } from "react";
 
-export const TaskContext = createContext(); 
+export const TaskContext = createContext();
 
-export const TaskProvider = ({ children }) => {
+export function TaskProvider({ children }) {
   const [tasks, setTasks] = useState([]);
 
-  const addTask = (task) => setTasks(prev => [...prev, task]);
-  const updateTask = (updatedTask) => setTasks(prev =>
-    prev.map(task => task.id === updatedTask.id ? updatedTask : task)
-  );
-  const deleteTask = (id) => setTasks(prev => prev.filter(task => task.id !== id));
+  // useEffect(() => {
+
+  //   if(!localStorage.getItem("tasks")){
+  //     localStorage.setItem("tasks", JSON.stringify([]))
+  //   }
+  //   if(tasks.length!==0){
+  //   localStorage.setItem("tasks", JSON.stringify(tasks));
+  //   }
+  // }, [tasks]);
+
+
+  // useEffect(() => {
+  //   const tasks = JSON.parse(localStorage.getItem("tasks"));
+  //   setTasks(tasks);
+  // }, []);
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
+    <TaskContext.Provider value={{ tasks, setTasks }}>
       {children}
     </TaskContext.Provider>
   );
-};
-
-export const useTasks = () => useContext(TaskContext);
+}

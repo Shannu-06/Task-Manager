@@ -8,7 +8,7 @@ function RegistrationForm() {
     gender: '',
     terms: false,
     bio: ''
-  });
+  }); 
 
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState({});

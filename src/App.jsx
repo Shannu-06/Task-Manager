@@ -1,25 +1,21 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { TaskProvider } from './contexts/TaskContext';
-import HomePage from './components/HomePage';
-import TaskList from './components/TaskList';
-import AddTask from './components/AddTask';
-import TaskDetail from './components/TaskDetail';
 
+import "./App.css";
+import { AppRoutes } from "./routes/Routes";
+import { UserProvider } from "./contexts/UserContext";
+import HomePage from "./components/HomePage";
+import { useCounter } from "./hooks/useCounter";
+import { TaskProvider } from "./contexts/TaskContext";
 
-const App = () => {
+function App() {
   return (
-    <TaskProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/tasks" element={<TaskList />} />
-          <Route path="/add-task" element={<AddTask />} />
-          <Route path="/task/:id" element={<TaskDetail />} />
-        </Routes>
-      </BrowserRouter>
-    </TaskProvider>
+    <div className="h-screen  ">
+      <TaskProvider>
+      <AppRoutes />
+      </TaskProvider>
+    
+    </div>
   );
-};
+}
 
 export default App;

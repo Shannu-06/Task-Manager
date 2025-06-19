@@ -1,42 +1,78 @@
-import { useTasks } from '../hooks/useTasks';
-import { useForm } from '../hooks/useForm';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import { TaskContext } from "../contexts/TaskContext";
+import { useNavigate } from "react-router";
+import { addTask } from "../service/tasksService";
 
-const AddTask = () => {
-  const { addTask } = useTasks();
-  const { formData, handleInputChange, resetForm } = useForm({
-    id: Date.now(),
-    title: '',
-    description: '',
-    status: 'pending',
-    priority: 'medium'
-  });
+export default function AddTasks() {
+  const { tasks, setTasks } = useContext(TaskContext);
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addTask(formData);
-    resetForm();
-    navigate('/tasks');
-  };
-
+  //   console.log(tasks, "tasks");
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Task</h2>
-      <input name="title" value={formData.title} onChange={handleInputChange} placeholder="Title" required />
-      <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder="Description" />
-      <select name="status" value={formData.status} onChange={handleInputChange}>
-        <option value="pending">Pending</option>
-        <option value="completed">Completed</option>
-      </select>
-      <select name="priority" value={formData.priority} onChange={handleInputChange}>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <button type="submit">Add Task</button>
-    </form>
-  );
-};
+    <div className="flex justify-center items-center h-full w-full ">
+      <form
+        className="flex flex-col justify-center gap-2 border-1 border-black p-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const data = new FormData(e.target);
+          const task = data.get("task");
+          const desc = data.get("desc");
+          const priority = data.get("priority");
+          const status = data.get("status");
+          console.log(task, desc, priority, status);
 
-export default AddTask;
+          addTask({
+            title: task,
+            description: desc,
+            status,
+            priority,
+          });
+
+          // setTasks((prev) => {
+
+          //     return [
+          //       ...prev,
+          //       {
+          //         id: prev.length + 1,
+          //         title: task,
+          //         description: desc,
+          //         status,
+          //         priority,
+          //       },
+          //     ];
+          //   });
+
+          navigate("/tasks")
+        }}
+      >
+        <label htmlFor="task">Task</label>
+        <input type="text" id="task" name="task" className="border-1" />
+        <label htmlFor="desc" id="desc">
+          Description
+        </label>
+        <textarea name="desc" id="desc" className="border-1"></textarea>
+
+        <label>Priority</label>
+        <select name="priority" id="priority" className="border-1">
+          <option value={"low"}>Low</option>
+          <option value={"medium"}>Medium</option>
+          <option value={"high"}>High</option>
+        </select>
+
+        <label>Status</label>
+        <select name="status" id="status" className="border-1">
+          <option value={"pending"}>Pending</option>
+          <option value={"completed"}>Completed</option>
+        </select>
+        <button
+          type="submit"
+          className="bg-blue-700 text-white"
+          onClick={() => {}}
+        >
+          Add Task
+        </button>
+      </form>
+    </div>
+  );
+}
